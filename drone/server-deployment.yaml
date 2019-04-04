@@ -15,9 +15,9 @@ spec:
         imagePullPolicy: Always
         name: drone-server
         ports:
-        - containerPort: 8000
+        - containerPort: 80
           protocol: TCP
-        - containerPort: 9000
+        - containerPort: 443
           protocol: TCP
         volumeMounts:
           # Persist our configs in an SQLite DB in here
@@ -101,6 +101,12 @@ spec:
             configMapKeyRef:
               name: drone-config
               key: server.remote.gitlab.secret
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 3
 
       volumes:
         - name: drone-server-sqlite-db
