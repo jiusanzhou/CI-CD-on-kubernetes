@@ -10,10 +10,6 @@ spec:
   - name: http
     protocol: TCP
     port: 80
-    targetPort: 8000
-  - name: grpc
-    protocol: TCP
-    port: 9000
-    targetPort: 9000
+    targetPort: 80
   selector:
     app: drone-server

@@ -9,7 +9,7 @@ data:
   # Drone Server Config #
   #######################
 
-  server.debug: true
+  server.debug: "true"
   # server host name
   server.host: drone.proxy.cn
   # start the server in debug mode
@@ -24,6 +24,7 @@ data:
   server.rpc.url:  http://drone.proxy.cn
 
   # remote parameters (GitLab)
+  server.git.always_auth: "false"
   server.remote.gitlab.server: "http://git.proxy.cn"
   server.remote.gitlab.client: e174b2e74da455bedad184d2e7614e89dbc2c5a10e928e00484417a8bf187160
   server.remote.gitlab.secret: 0225cca5edef9af82d05704fe260979d791a65a6fc342f5a23eb7df7563d7760
