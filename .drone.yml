@@ -1,0 +1,4 @@
+pipeline:
+  test:
+    image: golang
+    commands: echo "Welcome to 'CI/CD on Kubernetes!'"
