@@ -1,0 +1,111 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: drone-server
+  namespace: REPLACE-THIS-WITH-NAMESAPCE
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: drone-server
+    spec:
+      containers:
+      - image: drone/drone:latest
+        imagePullPolicy: Always
+        name: drone-server
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        - containerPort: 9000
+          protocol: TCP
+        volumeMounts:
+          # Persist our configs in an SQLite DB in here
+          - name: drone-server-sqlite-db
+            mountPath: /var/lib/drone
+          # Enables Docker in Docker
+          - name: docker-socket
+            mountPath: /var/run/docker.sock
+        resources:
+          requests:
+            cpu: 40m
+            memory: 32Mi
+        env:
+        # Basic config
+        - name: DRONE_SERVER_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: drone-config
+              key: server.host
+        - name: DRONE_RPC_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: drone-config
+              key: server.rpc.url
+        - name: DRONE_SERVER_PROTO
+          valueFrom:
+            configMapKeyRef:
+              name: drone-config
+              key: server.proto
+        - name: DRONE_RPC_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: drone-secrets
+              key: server.secret
+        - name: DRONE_AGENTS_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: drone-config
+              key: server.agents.enabled
+        - name: DRONE_LOGS_DEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: drone-config
+              key: server.debug
+        
+        # Database config
+        - name: DRONE_DATABASE_DRIVER
+          valueFrom:
+            configMapKeyRef:
+              name: drone-config
+              key: server.database.driver
+        - name: DRONE_DATABASE_DATASOURCE
+          valueFrom:
+            configMapKeyRef:
+              name: drone-config
+              key: server.database.datasource
+
+        # Git config
+        - name: DRONE_GIT_ALWAYS_AUTH
+          valueFrom:
+            configMapKeyRef:
+              name: drone-config
+              key: server.git.always_auth
+        - name: DRONE_GITLAB_SKIP_VERIFY
+          valueFrom:
+            configMapKeyRef:
+              name: drone-config
+              key: server.remote.gitlab.skip_verify
+        - name: DRONE_GITLAB_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: drone-config
+              key: server.remote.gitlab.server
+        - name: DRONE_GITLAB_CLIENT_ID
+          valueFrom:
+            configMapKeyRef:
+              name: drone-config
+              key: server.remote.gitlab.client
+        - name: DRONE_GITLAB_CLIENT_SECRET
+          valueFrom:
+            configMapKeyRef:
+              name: drone-config
+              key: server.remote.gitlab.secret
+
+      volumes:
+        - name: drone-server-sqlite-db
+          hostPath:
+            path: /var/lib/drone
+        - name: docker-socket
+          hostPath:
+            path: /var/run/docker.sock

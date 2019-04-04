@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: drone-config
+  namespace: REPLACE-THIS-WITH-NAMESAPCE
+data:
+
+  #######################
+  # Drone Server Config #
+  #######################
+
+  server.debug: true
+  # server host name
+  server.host: drone.proxy.cn
+  # start the server in debug mode
+  server.proto: "http"
+  # database driver, defaul as sqlite3
+  server.database.driver: sqlite3
+  # database driver configuration string
+  server.database.datasource: drone.sqlite
+  # enable agent
+  server.agents.enabled: "true"
+
+  server.rpc.url:  http://drone.proxy.cn
+
+  # remote parameters (GitLab)
+  server.remote.gitlab.server: "http://git.proxy.cn"
+  server.remote.gitlab.client: e174b2e74da455bedad184d2e7614e89dbc2c5a10e928e00484417a8bf187160
+  server.remote.gitlab.secret: 0225cca5edef9af82d05704fe260979d791a65a6fc342f5a23eb7df7563d7760
+  server.remote.gitlab.skip_verify: "true"
+
+  ######################
+  # Drone Agent Config #
+  ######################
+
+  agent.max: "2"
+  agent.debug: "true"
+  agent.keepalive.time: "1s"
+  agent.keepalive.timeout: "5s"
