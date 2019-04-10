@@ -139,7 +139,11 @@
 
 ### CI
 
+<div align="center">
+
 ![Overview CI](./asserts/images/ci-overview.png)
+
+</div>
 
 #### 稳定构建
 
